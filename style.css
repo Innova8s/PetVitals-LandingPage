@@ -771,17 +771,17 @@ header {
 
 /* Background Images for Each Card */
 .pet-parents-card {
-    background-image: url("image/card1.jpg") !important;
+    background-image: url("../image/card1.jpg") !important;
     
 }
 
 .veterinarians-card {
-    background-image: url("image/card2.jpg") !important;
+    background-image: url("../image/card2.jpg") !important;
   
 }
 
 .clinics-card {
-    background-image: url("image/card3.jpg") !important;
+    background-image: url("../image/card3.jpg") !important;
     
 }
 
