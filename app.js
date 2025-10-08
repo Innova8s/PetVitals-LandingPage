@@ -189,34 +189,239 @@ scrollToTopBtn.addEventListener('click', () => {
 
 
 
-    // Contact form submission
+    // Enhanced Contact Form Handling with Validation
     const contactForm = document.querySelector('.contact-form');
     
     if (contactForm) {
-        contactForm.addEventListener('submit', (e) => {
+        // Form validation and submission
+        contactForm.addEventListener('submit', async function(e) {
             e.preventDefault();
+            
+            const submitBtn = contactForm.querySelector('.submit-btn');
+            const originalText = submitBtn.innerHTML;
             
             // Get form data
             const formData = new FormData(contactForm);
-            const name = formData.get('name');
-            const email = formData.get('email');
+            const name = (formData.get('name') || '').trim();
+            const email = (formData.get('email') || '').trim();
+            const message = (formData.get('message') || '').trim();
             
-            // Show success message
-            const submitBtn = contactForm.querySelector('.submit-btn');
-            const originalText = submitBtn.textContent;
+            // Basic validation
+            if (!name || !email || !message) {
+                showNotification('Please fill in all required fields.', 'error');
+                return;
+            }
             
-            submitBtn.innerHTML = '<i class="fas fa-check"></i> Message Sent!';
-            submitBtn.style.background = '#10B981';
+            // Email validation
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                showNotification('Please enter a valid email address.', 'error');
+                return;
+            }
             
-            // Reset form
-            contactForm.reset();
+            // Message length validation
+            if (message.length < 10) {
+                showNotification('Message must be at least 10 characters long.', 'error');
+                return;
+            }
             
-            // Reset button after delay
-            setTimeout(() => {
-                submitBtn.innerHTML = originalText;
-                submitBtn.style.background = '';
-            }, 3000);
+            // Show loading state
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+            submitBtn.style.opacity = '0.7';
+            submitBtn.style.cursor = 'not-allowed';
+            
+            try {
+                // Prepare submission data
+                const submissionData = new FormData();
+                submissionData.append('timestamp', new Date().toISOString());
+                submissionData.append('source', 'PetVitals');
+                submissionData.append('name', name);
+                submissionData.append('email', email);
+                submissionData.append('message', message);
+
+                // Google Apps Script Web App URL
+                const scriptURL = 'https://script.google.com/macros/s/AKfycbyLv1TKeo-paZE_zwjxmB5daPScK3ibFmlGOe3IyKrZt3-wVNA3YKJBThUHGF0aBgog/exec';
+                
+                console.log('Sending data to Google Apps Script...');
+                console.log('Data:', {
+                    timestamp: new Date().toISOString(),
+                    source: 'PetVitals',
+                    name: name,
+                    email: email,
+                    message: message
+                });
+
+                // Send to Google Apps Script
+                const response = await fetch(scriptURL, {
+                    method: 'POST',
+                    body: submissionData
+                });
+
+                console.log('Response status:', response.status);
+                console.log('Response ok:', response.ok);
+
+                if (response.ok) {
+                    // Show success message
+                    submitBtn.innerHTML = '<i class="fas fa-check"></i> Message Sent Successfully!';
+                    submitBtn.style.background = '#10B981';
+                    submitBtn.style.opacity = '1';
+                    
+                    // Show notification
+                    showNotification('Thank you! Your message has been sent successfully. We\'ll get back to you within 24 hours!', 'success');
+                    
+                    // Reset form
+                    contactForm.reset();
+                    
+                    // Reset button after delay
+                    setTimeout(() => {
+                        submitBtn.innerHTML = originalText;
+                        submitBtn.style.background = '';
+                        submitBtn.disabled = false;
+                        submitBtn.style.cursor = 'pointer';
+                        submitBtn.style.opacity = '1';
+                    }, 3000);
+                } else {
+                    throw new Error('Server responded with status: ' + response.status);
+                }
+                
+            } catch (error) {
+                console.error('Form submission error:', error);
+                
+                // Show error message
+                submitBtn.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Failed to Send';
+                submitBtn.style.background = '#EF4444';
+                submitBtn.style.opacity = '1';
+                
+                // Show notification
+                showNotification('Sorry, there was an error. Please try again or contact us directly at enquiry@innova8s.com', 'error');
+                
+                // Reset button after delay
+                setTimeout(() => {
+                    submitBtn.innerHTML = originalText;
+                    submitBtn.style.background = '';
+                    submitBtn.disabled = false;
+                    submitBtn.style.cursor = 'pointer';
+                    submitBtn.style.opacity = '1';
+                }, 3000);
+            }
         });
+        
+        // Enhanced form field validation
+        const formInputs = contactForm.querySelectorAll('input, textarea, select');
+        
+        formInputs.forEach(input => {
+            input.addEventListener('blur', function() {
+                validateField(this);
+            });
+            
+            input.addEventListener('input', function() {
+                // Remove error styling on input
+                if (this.classList.contains('error')) {
+                    this.classList.remove('error');
+                    const errorMessage = this.parentNode.querySelector('.field-error');
+                    if (errorMessage) {
+                        errorMessage.remove();
+                    }
+                }
+            });
+        });
+    }
+    
+    // Field validation function
+    function validateField(field) {
+        const value = field.value.trim();
+        const fieldName = field.name;
+        
+        // Remove existing error styling
+        field.classList.remove('error');
+        const existingError = field.parentNode.querySelector('.field-error');
+        if (existingError) {
+            existingError.remove();
+        }
+        
+        // Validate based on field type
+        let isValid = true;
+        let errorMessage = '';
+        
+        switch (fieldName) {
+            case 'name':
+                if (!value) {
+                    isValid = false;
+                    errorMessage = 'Name is required';
+                } else if (value.length < 2) {
+                    isValid = false;
+                    errorMessage = 'Name must be at least 2 characters';
+                }
+                break;
+                
+            case 'email':
+                if (!value) {
+                    isValid = false;
+                    errorMessage = 'Email is required';
+                } else {
+                    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                    if (!emailRegex.test(value)) {
+                        isValid = false;
+                        errorMessage = 'Please enter a valid email address';
+                    }
+                }
+                break;
+                
+                
+            case 'message':
+                if (!value) {
+                    isValid = false;
+                    errorMessage = 'Message is required';
+                } else if (value.length < 10) {
+                    isValid = false;
+                    errorMessage = 'Message must be at least 10 characters';
+                }
+                break;
+        }
+        
+        if (!isValid) {
+            field.classList.add('error');
+            const errorElement = document.createElement('div');
+            errorElement.className = 'field-error';
+            errorElement.textContent = errorMessage;
+            field.parentNode.appendChild(errorElement);
+        }
+        
+        return isValid;
+    }
+    
+    // Notification function
+    function showNotification(message, type) {
+        // Remove existing notifications
+        const existingNotif = document.querySelector('.custom-notification');
+        if (existingNotif) {
+            existingNotif.remove();
+        }
+        
+        // Create notification element
+        const notification = document.createElement('div');
+        notification.className = `custom-notification ${type}`;
+        notification.innerHTML = `
+            <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i>
+            <span>${message}</span>
+        `;
+        
+        // Add to body
+        document.body.appendChild(notification);
+        
+        // Show notification
+        setTimeout(() => {
+            notification.classList.add('show');
+        }, 100);
+        
+        // Remove after 5 seconds
+        setTimeout(() => {
+            notification.classList.remove('show');
+            setTimeout(() => {
+                notification.remove();
+            }, 300);
+        }, 5000);
     }
     
     // Contact button functionality

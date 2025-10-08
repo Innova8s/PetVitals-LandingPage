@@ -1,0 +1,210 @@
+═══════════════════════════════════════════════════════════════════════════
+                    PETVITALS CONTACT FORM SETUP CHECKLIST
+═══════════════════════════════════════════════════════════════════════════
+
+Print this checklist and follow step-by-step!
+
+═══════════════════════════════════════════════════════════════════════════
+PART 1: CREATE GOOGLE SHEET
+═══════════════════════════════════════════════════════════════════════════
+
+[ ] Step 1.1: Open browser and go to: https://sheets.google.com
+[ ] Step 1.2: Click "+ Blank" to create new spreadsheet
+[ ] Step 1.3: Name it: "PetVitals Contact Form Responses"
+[ ] Step 1.4: In cell A1, type: Timestamp
+[ ] Step 1.5: In cell B1, type: Name
+[ ] Step 1.6: In cell C1, type: Email
+[ ] Step 1.7: In cell D1, type: Interest
+[ ] Step 1.8: In cell E1, type: Pet Type
+[ ] Step 1.9: In cell F1, type: Message
+[ ] Step 1.10: Make Row 1 bold (select row, click Bold button)
+
+✅ Part 1 Complete!
+
+═══════════════════════════════════════════════════════════════════════════
+PART 2: SETUP APPS SCRIPT
+═══════════════════════════════════════════════════════════════════════════
+
+[ ] Step 2.1: In Google Sheet, click menu "Extensions"
+[ ] Step 2.2: Click "Apps Script"
+[ ] Step 2.3: New tab opens - wait for it to load
+[ ] Step 2.4: Select ALL existing code and DELETE it
+[ ] Step 2.5: Open file: google-apps-script.js from your project
+[ ] Step 2.6: Copy ALL code from that file (Ctrl+A, Ctrl+C)
+[ ] Step 2.7: Paste into Apps Script editor (Ctrl+V)
+[ ] Step 2.8: Click Save icon (💾) or press Ctrl+S
+[ ] Step 2.9: When prompted, name it: "PetVitals Form Handler"
+[ ] Step 2.10: Wait for "All changes saved" message
+
+✅ Part 2 Complete!
+
+═══════════════════════════════════════════════════════════════════════════
+PART 3: DEPLOY WEB APP
+═══════════════════════════════════════════════════════════════════════════
+
+[ ] Step 3.1: In Apps Script, click "Deploy" (top right)
+[ ] Step 3.2: Select "New deployment"
+[ ] Step 3.3: Click gear icon ⚙️ next to "Select type"
+[ ] Step 3.4: Choose "Web app"
+[ ] Step 3.5: Enter description: "PetVitals Contact Form Handler"
+[ ] Step 3.6: Set "Execute as" to: Me (your-email@gmail.com)
+[ ] Step 3.7: Set "Who has access" to: Anyone
+[ ] Step 3.8: Click "Deploy" button
+[ ] Step 3.9: Authorization required appears - click "Authorize access"
+[ ] Step 3.10: Select your Google account
+[ ] Step 3.11: See warning? Click "Advanced"
+[ ] Step 3.12: Click "Go to PetVitals Form Handler (unsafe)"
+[ ] Step 3.13: Click "Allow"
+[ ] Step 3.14: Copy the Web App URL (starts with https://script.google.com...)
+            
+            Write it here: _________________________________________________
+            
+            Or save it in a text file!
+            
+[ ] Step 3.15: Click "Done"
+
+✅ Part 3 Complete!
+
+═══════════════════════════════════════════════════════════════════════════
+PART 4: UPDATE WEBSITE CODE
+═══════════════════════════════════════════════════════════════════════════
+
+[ ] Step 4.1: Open file: app.js
+[ ] Step 4.2: Press Ctrl+F to open Find
+[ ] Step 4.3: Search for: YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE
+[ ] Step 4.4: Should jump to line 211
+[ ] Step 4.5: Replace the text (keep the quotes!) with your Web App URL
+            
+            Before: const scriptURL = 'YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE';
+            After:  const scriptURL = 'https://script.google.com/macros/s/YOUR_ID/exec';
+            
+[ ] Step 4.6: Save file (Ctrl+S)
+[ ] Step 4.7: Close file
+
+✅ Part 4 Complete!
+
+═══════════════════════════════════════════════════════════════════════════
+PART 5: TEST THE FORM
+═══════════════════════════════════════════════════════════════════════════
+
+[ ] Step 5.1: Open index.html in web browser
+[ ] Step 5.2: Scroll down to Contact section
+[ ] Step 5.3: Fill in form with test data:
+            Name: Test User
+            Email: test@example.com
+            Interest: Pet Parent Solutions
+            Pet Type: Dog
+            Message: This is a test message
+            
+[ ] Step 5.4: Click "Send Message" button
+[ ] Step 5.5: Button should show spinner and "Sending..."
+[ ] Step 5.6: Wait 2-3 seconds
+[ ] Step 5.7: Should see green button: "Message Sent Successfully!"
+[ ] Step 5.8: Should see notification popup in top-right corner
+[ ] Step 5.9: Form fields should be cleared/empty
+[ ] Step 5.10: Go back to Google Sheet
+[ ] Step 5.11: Refresh the sheet (F5)
+[ ] Step 5.12: Check Row 2 - should see your test data!
+[ ] Step 5.13: Verify all data is correct:
+            - Column A: Today's date and time
+            - Column B: Test User
+            - Column C: test@example.com
+            - Column D: Pet Parent Solutions
+            - Column E: Dog
+            - Column F: This is a test message
+
+✅ Part 5 Complete!
+
+═══════════════════════════════════════════════════════════════════════════
+PART 6: ENABLE EMAIL NOTIFICATIONS (OPTIONAL)
+═══════════════════════════════════════════════════════════════════════════
+
+[ ] Step 6.1: Go back to Apps Script editor
+[ ] Step 6.2: Find line 68 (approx)
+[ ] Step 6.3: Look for: // sendEmailNotification(params);
+[ ] Step 6.4: Remove the // at the start (uncomment it)
+[ ] Step 6.5: Should now be: sendEmailNotification(params);
+[ ] Step 6.6: Find line 86 (approx)
+[ ] Step 6.7: Change email address to yours:
+            var recipient = "your-email@example.com";
+[ ] Step 6.8: Save (Ctrl+S)
+[ ] Step 6.9: Click "Deploy" → "Manage deployments"
+[ ] Step 6.10: Click Edit icon (✏️ pencil)
+[ ] Step 6.11: Under "Version", click dropdown
+[ ] Step 6.12: Select "New version"
+[ ] Step 6.13: Click "Deploy"
+[ ] Step 6.14: Click "Done"
+[ ] Step 6.15: Test by submitting another form
+[ ] Step 6.16: Check your email inbox (may take 1-2 minutes)
+[ ] Step 6.17: Check spam folder if not in inbox
+
+✅ Part 6 Complete!
+
+═══════════════════════════════════════════════════════════════════════════
+TROUBLESHOOTING CHECKLIST
+═══════════════════════════════════════════════════════════════════════════
+
+If form shows "Failed to Send":
+
+[ ] Verify Web App URL in app.js is correct (no typos)
+[ ] Check that deployment is set to "Anyone" can access
+[ ] Try redeploying (Deploy → Manage deployments → Edit → New version)
+[ ] Open browser console (F12) and check for errors
+[ ] Try in incognito/private browsing mode
+[ ] Clear browser cache and cookies
+[ ] Check internet connection
+
+If no data appears in Google Sheet:
+
+[ ] Verify column headers match exactly (case-sensitive)
+[ ] Check you're looking at the correct Google Sheet
+[ ] Refresh the sheet (F5)
+[ ] Check Apps Script logs (View → Executions)
+[ ] Verify deployment is active
+[ ] Check that script saved properly
+
+If email notifications not working:
+
+[ ] Verify sendEmailNotification is uncommented
+[ ] Check recipient email address is correct
+[ ] Look in spam/junk folder
+[ ] Verify deployment was updated to "New version"
+[ ] Check Apps Script logs for errors
+
+═══════════════════════════════════════════════════════════════════════════
+FINAL VERIFICATION
+═══════════════════════════════════════════════════════════════════════════
+
+[ ] Form submits without errors
+[ ] Data appears in Google Sheet
+[ ] Timestamp is correct
+[ ] All fields are captured
+[ ] Success notification appears
+[ ] Form clears after submission
+[ ] Button returns to normal after 3 seconds
+[ ] Works on mobile device
+[ ] Works in different browsers
+[ ] Email notifications work (if enabled)
+
+═══════════════════════════════════════════════════════════════════════════
+🎉 CONGRATULATIONS! YOUR CONTACT FORM IS LIVE! 🎉
+═══════════════════════════════════════════════════════════════════════════
+
+Next Steps:
+• Test form monthly to ensure it's working
+• Check Google Sheet regularly for new submissions
+• Respond to inquiries within 24 hours
+• Back up your Google Sheet data monthly
+• Monitor Apps Script quota usage (View → Executions)
+
+═══════════════════════════════════════════════════════════════════════════
+
+Need Help? Check these files:
+• QUICK_START.md - Quick reference
+• SETUP_GUIDE.md - Detailed instructions
+• HOW_IT_WORKS.md - Technical documentation
+• README_CONTACT_FORM.md - Complete overview
+
+═══════════════════════════════════════════════════════════════════════════
+                              Setup Date: ___________
+═══════════════════════════════════════════════════════════════════════════
